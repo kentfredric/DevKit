@@ -22,7 +22,7 @@ class DevKit_Autoload {
 
   public static $_prefix   = array();
   public static $_hardpath = array();
-  public static $_debug    = true;
+  public static $_debug    = false;
 
   private static function debug(){
 
@@ -81,24 +81,24 @@ class DevKit_Autoload {
       $prefix_point = strpos( $class , $i );
       if( strpos( $class, $i ) !== 0 ){
         continue;
-			}
-			if( (   strpos( $class, $i . '_' ) !== 0 )
-			 		&&
-					( 	$class !== $i  )
-			){
-				# this ignores things that Match the head, 
-				# but are not exact matches or child( $v . '_' ) matches .
-				continue;
-			}
+      }
+      if( (   strpos( $class, $i . '_' ) !== 0 )
+           &&
+          (   $class !== $i  )
+      ){
+        # this ignores things that Match the head, 
+        # but are not exact matches or child( $v . '_' ) matches .
+        continue;
+      }
 
       self::debug("$class] Prefix match for $class : $i ");
       $prefix_length = strlen( $i );
-			$suffix = substr( $class, $prefix_length );
-			$file   = false;
-			if( strlen( $suffix ) === 0 ){
-				$file = $v . '.php';
-			}
-			
+      $suffix = substr( $class, $prefix_length );
+      $file   = false;
+      if( strlen( $suffix ) === 0 ){
+        $file = $v . '.php';
+      }
+      
       $file = $v . str_replace('_','/',$suffix) . '.php';
       self::debug("$class] Prefix expansion: $file");
       if( file_exists( $file ) ){
