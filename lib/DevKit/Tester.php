@@ -110,6 +110,28 @@ class DevKit_Tester {
     }
   }
 
+  public function like( $result, $expression, $message ){
+    if( preg_match( $expression, $result ) ){
+      $this->pass( $message );
+    } else {
+      $this->fail( $message );
+      $this->diag("like( x , y ) :   x =~ y ");
+      $this->diag("Got: '$result'");
+      $this->diag("Expected matching: '$expression'");
+    }
+  }
+
+  public function unlike( $result, $expression, $message ){
+    if( !preg_match( $expression, $result ) ){
+      $this->pass( $message );
+    } else {
+      $this->fail( $message );
+      $this->diag("unlike( x , y ) :   x !~ y ");
+      $this->diag("Got: '$result'");
+      $this->diag("Expected anything but: '$expression'");
+    }
+  }
+
   public function done_testing(){
     print "1.." . $this->current;
   }
