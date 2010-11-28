@@ -22,12 +22,12 @@ class DevKit_Tester {
   public function caller_string( $frameskip = 0 , $depth = -1 ){
     $frameskip += 1;
     $backtrace = debug_backtrace();
-    if( $depth < 0 ){ 
+    if( $depth < 0 ){
       $depth = count(  $backtrace );
     }
     $backtrace = array_slice( $backtrace, $frameskip, $depth, true );
     $out = array();
-    foreach( $backtrace as $index => $v ){ 
+    foreach( $backtrace as $index => $v ){
       array_push( $out, "#$index : {$v['file']} @ {$v['line']} : {$v['function']} (" .
          implode(",", $v['args']) . ")");
     }
@@ -67,7 +67,7 @@ class DevKit_Tester {
       print "#\t$v\n";
     }
   }
-  public function diag_exception( Exception $e ){ 
+  public function diag_exception( Exception $e ){
     $this->diag("Exception:" . get_class( $e ) );
     $this->diag("Message: " . $e->getMessage());
     $this->diag("Backtrace: \n" . $e->getTraceAsString());

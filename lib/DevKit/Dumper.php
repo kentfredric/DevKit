@@ -1,6 +1,6 @@
 <?php
 
-class DevKit_Dumper { 
+class DevKit_Dumper {
 
   private $iid = 0;
   private $dumperid = 0;
@@ -8,11 +8,11 @@ class DevKit_Dumper {
   private $stash;
   private $gcstash;
 
-  public function _explain_null(){ 
+  public function _explain_null(){
     return array( 'null', array() );
   }
-  public function _explain_bool( &$item ){ 
-    if ( $item ){ 
+  public function _explain_bool( &$item ){
+    if ( $item ){
       return array( 'boolean', array( 'value' => 'true' ) );
     }
     return array('boolean', array('value' => 'false') );
@@ -28,8 +28,8 @@ class DevKit_Dumper {
     return array('string', array( 'length' => $length , 'value' => "$item" ));
   }
 
-  public function _explain_array( &$item ){ 
-    if( array_key_exists( '__DevKit_Dumper', $item ) && array_key_exists( $this->dumperid , $item['__DevKit_Dumper'] ) ){ 
+  public function _explain_array( &$item ){
+    if( array_key_exists( '__DevKit_Dumper', $item ) && array_key_exists( $this->dumperid , $item['__DevKit_Dumper'] ) ){
       return array('array', array( 'id' => $item['__DevKit_Dumper'][ $this->dumperid ]['id'] ) );
     }
     if( !array_key_exists( '__DevKit_Dumper', $item )) {
@@ -42,8 +42,8 @@ class DevKit_Dumper {
     $this->gcstash[]= &$item;
     $output = array();
     $l = 0;
-    foreach( $item as $i => &$v ){ 
-      if( $i == '__DevKit_Dumper' ){ 
+    foreach( $item as $i => &$v ){
+      if( $i == '__DevKit_Dumper' ){
         continue;
       }
       $l++;
@@ -51,9 +51,9 @@ class DevKit_Dumper {
     }
     return array('array', array('items' => $l, 'id' => $myid , 'data' => $output ));
   }
-  public function _explain_object( &$item ){ 
+  public function _explain_object( &$item ){
     $dumper = array();
-    $id = spl_object_hash( $item ); 
+    $id = spl_object_hash( $item );
     if( array_key_exists( $this->stash, $id ) ) {
       return array('object', array( 'id' => $this->stash[$id] ));
     }
@@ -62,8 +62,8 @@ class DevKit_Dumper {
     $properties = get_object_vars( $item );
     $output = array();
     $l = 0;
-    foreach( $properties as $i => &$v ){ 
-      if( $i == '__DevKit_Dumper' ){ 
+    foreach( $properties as $i => &$v ){
+      if( $i == '__DevKit_Dumper' ){
         continue;
       }
       $l++;
@@ -71,8 +71,8 @@ class DevKit_Dumper {
     }
     return array( 'object', array( 'properties' => $l, 'id' =>  $myid , 'data' => $output ));
   }
-  private function &_gcstash(){ 
-    if( isset( $this->gcstash ) ){ 
+  private function &_gcstash(){
+    if( isset( $this->gcstash ) ){
       return $this->gcstash;
     }
     $this->gcstash = array();
@@ -80,7 +80,7 @@ class DevKit_Dumper {
   }
   public function _cleangc(){
     $stash = $this->_gcstash();
-    foreach( $stash as $i => &$v ){ 
+    foreach( $stash as $i => &$v ){
       unset( $v['__DevKit_Dumper'] );
     }
   }
@@ -89,7 +89,7 @@ class DevKit_Dumper {
     switch(true){
       case is_null( $item )    : return $this->_explain_null();
       case is_scalar( $item )  :
-        switch ( true ) { 
+        switch ( true ) {
           case is_bool( $item )    : return $this->_explain_bool( $item );
           case is_integer( $item ) : return $this->_explain_integer( $item );
           case is_float( $item )   : return $this->_explain_float( $item );
@@ -109,7 +109,7 @@ class DevKit_Dumper {
         array_push( $lines, "$label: $value");
         continue;
       }
-      if( $label === 'data' ){ 
+      if( $label === 'data' ){
         array_push( $lines, "$label:" );
         foreach( $value as $record ){
           $subresults = array_filter(explode("\n", $this->_format($record)));
@@ -125,14 +125,14 @@ class DevKit_Dumper {
           array_push( $lines, "$indent$line");
       }
     }
-    foreach( $lines as $lineno => &$line ){ 
+    foreach( $lines as $lineno => &$line ){
       $line = "$indent$line";
     }
     array_unshift( $lines , $data[0] . ":" );
     return implode("\n", $lines ) . "\n";
   }
 
-  public static function explain( &$item ){ 
+  public static function explain( &$item ){
     $i = new self;
     self::$dumperidseq += 1;
     $i->dumperid = self::$dumperidseq;

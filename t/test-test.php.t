@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 
-/* For extra fun, run this with 
+/* For extra fun, run this with
  *
- * prove ./scripts/testtest.php 
- * and 
+ * prove ./scripts/testtest.php
+ * and
  * prove -v ./scripts/testtest.php
  */
 

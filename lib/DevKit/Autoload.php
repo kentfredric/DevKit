@@ -25,7 +25,7 @@ class DevKit_Autoload {
   public static $_debug    = false;
 
   private static function debug(){
-    
+
     if( !( self::$_debug || getenv('DEVKIT_AUTOLOAD_DEBUG') ) ){
       return;
     }
@@ -86,7 +86,7 @@ class DevKit_Autoload {
            &&
           (   $class !== $i  )
       ){
-        # this ignores things that Match the head, 
+        # this ignores things that Match the head,
         # but are not exact matches or child( $v . '_' ) matches .
         continue;
       }
@@ -98,7 +98,7 @@ class DevKit_Autoload {
       if( strlen( $suffix ) === 0 ){
         $file = $v . '.php';
       }
-      
+
       $file = $v . str_replace('_','/',$suffix) . '.php';
       self::debug("$class] Prefix expansion: $file");
       if( file_exists( $file ) ){
