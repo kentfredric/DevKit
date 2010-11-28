@@ -93,6 +93,8 @@ class DevKit_Tester {
       $this->diag("is_exactly( x, y ) : x === y ");
       $this->diag("Got '$result'");
       $this->diag("Expected '$expected'");
+      print_r( DevKit_Dumper::explain($result));
+      print_r( DevKit_Dumper::explain($expected));
     }
   }
   public function isnt_exactly( $result, $expected, $explanation = '' ){
@@ -103,6 +105,8 @@ class DevKit_Tester {
       $this->diag("isnt_exactly( x, y ) : x !== y ");
       $this->diag("Got '$result'");
       $this->diag("Expected anything but '$expected'");
+      ( DevKit_Dumper::explain($result));
+      print_r( DevKit_Dumper::explain($expected));
     }
   }
 
