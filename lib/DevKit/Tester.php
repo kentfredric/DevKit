@@ -67,6 +67,10 @@ class DevKit_Tester {
       print "#\t$v\n";
     }
   }
+  public function diag_exception( Exception $e ){ 
+    $this->diag($e->getMessage());
+    $this->diag($e->getTraceAsString());
+  }
   public function ok( $result,  $explanation = ''){
     if( $result ) {
       $this->pass( $explanation );
