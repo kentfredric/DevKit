@@ -25,8 +25,8 @@ class DevKit_Autoload {
   public static $_debug    = false;
 
   private static function debug(){
-
-    if( !self::$_debug ){
+    
+    if( !( self::$_debug || getenv('DEVKIT_AUTOLOAD_DEBUG') ) ){
       return;
     }
     $args      = func_get_args();
