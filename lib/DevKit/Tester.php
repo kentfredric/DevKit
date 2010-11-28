@@ -68,8 +68,9 @@ class DevKit_Tester {
     }
   }
   public function diag_exception( Exception $e ){ 
-    $this->diag($e->getMessage());
-    $this->diag($e->getTraceAsString());
+    $this->diag("Exception:" . get_class( $e ) );
+    $this->diag("Message: " . $e->getMessage());
+    $this->diag("Backtrace: \n" . $e->getTraceAsString());
   }
   public function ok( $result,  $explanation = ''){
     if( $result ) {
