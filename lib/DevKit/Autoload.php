@@ -18,7 +18,7 @@
  *
  */
 
-if(! defined('DEVKIT_AUTOLOAD')){
+if(! defined('DEVKIT_AUTOLOAD') && !class_exists('DEVKIT_AUTOLOAD', false )){
   define('DEVKIT_AUTOLOAD', 1 ); 
 
 class DevKit_Autoload {
