@@ -18,6 +18,9 @@
  *
  */
 
+if(! defined('DEVKIT_AUTOLOAD')){
+  define('DEVKIT_AUTOLOAD', 1 ); 
+
 class DevKit_Autoload {
 
   public static $_prefix   = array();
@@ -34,6 +37,7 @@ class DevKit_Autoload {
     $lines     = explode("\n", $content );
     $fulllines = array_filter( $lines );
     $data      = '[DevKit_Autoload] ' . implode("\n  > ", $fulllines) . "\n";
+#    print $data;
     fwrite(STDERR, $data);
   }
 
@@ -63,12 +67,7 @@ class DevKit_Autoload {
     return 0;
   }
 
-  /**
-   * The guts of the autoloader, but doesn't do require on its own.
-   */
-  public static function discover( $class ){
-
-    if( array_key_exists( $class , self::$_hardpath ) ){
+  public static function _try_hardpath( $class ) {
       self::debug("$class] Hardpath for $class");
       $path = self::$_hardpath[$class];
       if( file_exists( $path ) ){
@@ -76,25 +75,49 @@ class DevKit_Autoload {
         return $path;
       }
       self::debug("$class] Hardpath not found");
-   }
-    foreach( self::$_prefix as $i => $v ){
-      $prefix_point = strpos( $class , $i );
-      if( strpos( $class, $i ) !== 0 ){
-        continue;
-      }
-      if( (   strpos( $class, $i . '_' ) !== 0 )
+      return false;
+  }
+
+  public static function _get_prefix( $class, $assumedPrefix ){ 
+    if( $assumedPrefix == '' ){
+      self::debug("$class] Prefix match for $class : emptyPrefix ");
+      return array( '', $class );
+    }
+    $prefix_point = strpos( $class , $assumedPrefix );
+    if( $prefix_point !== 0 ){
+        return false;
+    }
+    if( ( strpos( $class, $assumedPrefix . '_' ) !== 0 )
            &&
-          (   $class !== $i  )
+        ( $class !== $assumedPrefix  )
       ){
         # this ignores things that Match the head,
         # but are not exact matches or child( $v . '_' ) matches .
+        return false;
+    }
+    self::debug("$class] Prefix match for $class : '$assumedPrefix' ");
+    $prefix_length = strlen( $assumedPrefix );
+    $suffix = substr( $class, $prefix_length );
+    return array( $assumedPrefix, $suffix );
+  }
+  /**
+   * The guts of the autoloader, but doesn't do require on its own.
+   */
+  public static function discover( $class ){
+
+    if( array_key_exists( $class , self::$_hardpath ) ){
+      if( $result = self::_try_hardpath($class) ){ 
+        return $result;
+      }
+    }
+    foreach( self::$_prefix as $i => $v ){
+      $prefix_data = self::_get_prefix( $class, $i ); 
+      if( !$prefix_data ){ 
         continue;
       }
-
-      self::debug("$class] Prefix match for $class : $i ");
-      $prefix_length = strlen( $i );
-      $suffix = substr( $class, $prefix_length );
+      list($prefix,$suffix) = $prefix_data;
       $file   = false;
+
       if( strlen( $suffix ) === 0 ){
         $file = $v . '.php';
       }
@@ -162,3 +185,4 @@ class DevKit_Autoload {
 
 DevKit_Autoload::setup();
 
+}
