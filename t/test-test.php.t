@@ -27,4 +27,5 @@ class Dummy {
 $instance = $t->new_lives("Can make classes", 'Dummy', array() );
 $rval   =   $t->method_call_lives('Can call methods', $instance, 'foo', array( ) );
 
+$t->is( $rval , "Yes" , "value passing works");
 $t->done_testing();
