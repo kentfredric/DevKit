@@ -159,7 +159,7 @@ class DevKit_Tester {
     $rval = false;
     try {
        $reflector = new ReflectionClass( $class );
-       if( $reflector->getConstructor() ){
+       if( $reflector->getConstructor() || count($args) > 0 ){
          $rval = $reflector->newInstanceArgs($args);
        } else {
          $rval = $reflector->newInstance();
@@ -169,6 +169,25 @@ class DevKit_Tester {
     } catch ( Exception $e ){
        $this->fail("Constructing $class should succeed: $message");
        $this->diag_exception( $e );
+       return null;
+    }
+    return null;
+  }
+
+
+  public function new_dies( $message, $class, array $args = array() ){
+    $rval = false;
+    try {
+       $reflector = new ReflectionClass( $class );
+       if( $reflector->getConstructor() || count($args) > 0 ){
+         $rval = $reflector->newInstanceArgs($args);
+       } else {
+         $rval = $reflector->newInstance();
+       }
+       $this->fail("Constructing $class should not succeeded: $message");
+       return $rval;
+    } catch ( Exception $e ){
+       $this->pass("Constructing $class should not succeed: $message");
        return null;
     }
     return null;
@@ -188,6 +207,24 @@ class DevKit_Tester {
     } catch ( Exception $e ){
        $this->fail("Calling method $methodname on  $class should succeed: $message");
        $this->diag_exception( $e );
+       return null;
+    }
+    return null;
+  }
+  public function method_call_dies ( $message, $object, $methodname, array $args ) {
+    $rval = false;
+    $class = get_class( $object );
+    try {
+      $reflector = new ReflectionObject( $object );
+      $method = $reflector->getMethod( $methodname );
+      if( !$method ){
+        return $this->pass("$message: Cannot call method $methodname on given object of type $class" );
+      }
+      $rval = $method->invokeArgs( $object,  $args );
+       $this->fail("Calling method $methodname on $class should not succeeded: $message");
+       return $rval;
+    } catch ( Exception $e ){
+       $this->pass("Calling method $methodname on  $class should not succeed: $message");
        return null;
     }
     return null;

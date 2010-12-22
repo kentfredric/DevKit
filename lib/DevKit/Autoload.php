@@ -19,7 +19,7 @@
  */
 
 if(! defined('DEVKIT_AUTOLOAD') && !class_exists('DEVKIT_AUTOLOAD', false )){
-  define('DEVKIT_AUTOLOAD', 1 ); 
+  define('DEVKIT_AUTOLOAD', 1 );
 
 class DevKit_Autoload {
 
@@ -78,7 +78,7 @@ class DevKit_Autoload {
       return false;
   }
 
-  public static function _get_prefix( $class, $assumedPrefix ){ 
+  public static function _get_prefix( $class, $assumedPrefix ){
     if( $assumedPrefix == '' ){
       self::debug("$class] Prefix match for $class : emptyPrefix ");
       return array( '', $class );
@@ -106,13 +106,13 @@ class DevKit_Autoload {
   public static function discover( $class ){
 
     if( array_key_exists( $class , self::$_hardpath ) ){
-      if( $result = self::_try_hardpath($class) ){ 
+      if( $result = self::_try_hardpath($class) ){
         return $result;
       }
     }
     foreach( self::$_prefix as $i => $v ){
-      $prefix_data = self::_get_prefix( $class, $i ); 
-      if( !$prefix_data ){ 
+      $prefix_data = self::_get_prefix( $class, $i );
+      if( !$prefix_data ){
         continue;
       }
       list($prefix,$suffix) = $prefix_data;
