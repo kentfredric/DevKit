@@ -155,6 +155,44 @@ class DevKit_Tester {
     }
   }
 
+  public function new_lives( $message, $class, array $args = array() ){
+    $rval = false;
+    try {
+       $reflector = new ReflectionClass( $class );
+       if( $reflector->getConstructor() ){
+         $rval = $reflector->newInstanceArgs($args);
+       } else {
+         $rval = $reflector->newInstance();
+       }
+       $this->pass("Constructing $class succeeded: $message");
+       return $rval;
+    } catch ( Exception $e ){
+       $this->fail("Constructing $class should succeed: $message");
+       $this->diag_exception( $e );
+       return null;
+    }
+    return null;
+  }
+  public function method_call_lives ( $message, $object, $methodname, array $args ) {
+    $rval = false;
+    $class = get_class( $object );
+    try {
+      $reflector = new ReflectionObject( $object );
+      $method = $reflector->getMethod( $methodname );
+      if( !$method ){
+        return $this->fail("$message: Cannot call method $methodname on given object of type $class" );
+      }
+      $rval = $method->invokeArgs( $object,  $args );
+       $this->pass("Calling method $methodname on $class succeeded: $message");
+       return $rval;
+    } catch ( Exception $e ){
+       $this->fail("Calling method $methodname on  $class should succeed: $message");
+       $this->diag_exception( $e );
+       return null;
+    }
+    return null;
+  }
+
   public function done_testing(){
     print "1.." . $this->current;
   }

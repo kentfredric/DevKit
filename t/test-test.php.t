@@ -17,4 +17,14 @@ $t->is( 1 , "1", "String 1 is numeric 1");
 $t->isnt_exactly( 1, "1", "String 1 isn't exactly numeric 1");
 $t->isnt( 1, "2", "String 1 is not numeric 2");
 $t->is_exactly( 1, 1, "Numeric 1 is numeric 1!");
+
+class Dummy {
+    public function foo(){
+        return "Yes";
+    }
+}
+
+$instance = $t->new_lives("Can make classes", 'Dummy', array() );
+$rval   =   $t->method_call_lives('Can call methods', $instance, 'foo', array( ) );
+
 $t->done_testing();
