@@ -188,7 +188,7 @@ class DevKit_Tester {
        return $rval;
     } catch ( Exception $e ){
        $this->pass("Constructing $class should not succeed: $message");
-       return null;
+       return $e;
     }
     return null;
   }
@@ -225,7 +225,7 @@ class DevKit_Tester {
        return $rval;
     } catch ( Exception $e ){
        $this->pass("Calling method $methodname on  $class should not succeed: $message");
-       return null;
+       return $e;
     }
     return null;
   }

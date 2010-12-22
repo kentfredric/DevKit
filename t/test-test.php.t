@@ -11,6 +11,8 @@
 require_once(dirname(__FILE__) . '/../lib/DevKit/Autoload.php');
 
 $t = new DevKit_Tester();
+DevKit_ErrorHandler::setup();
+
 $t->pass("A passing test");
 # $t->fail("A failing test");
 $t->is( 1 , "1", "String 1 is numeric 1");
@@ -24,8 +26,24 @@ class Dummy {
     }
 }
 
+class MoarDummy { }
+class MuchMoarDummy {
+    public function __construct( $mandatoryarg ) {
+    }
+}
+
 $instance = $t->new_lives("Can make classes", 'Dummy', array() );
 $rval   =   $t->method_call_lives('Can call methods', $instance, 'foo', array( ) );
 
 $t->is( $rval , "Yes" , "value passing works");
+
+$notaninstance = $t->new_dies("Cant make class", 'I_DONT_EXIST', array() );
+$t->diag_exception( $notaninstance );
+$notaninstance = $t->new_dies("Cant make class", 'MoarDummy', array(1) );
+$t->diag_exception( $notaninstance );
+$notaninstance = $t->new_dies("Cant make class", 'MuchMoarDummy', array() );
+$t->diag_exception( $notaninstance );
+
+
+
 $t->done_testing();
